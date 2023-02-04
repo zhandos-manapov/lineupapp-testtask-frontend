@@ -1,0 +1,13 @@
+.container{
+    padding: 5vh 15vw;
+    display: flex;
+}
+
+.mat-card{
+    width: 50%;
+    margin: 5px;
+}
+
+.mat-column-action{
+    flex: 0 0 15%;
+}
