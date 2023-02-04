@@ -1,7 +1,7 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { saveAs } from 'file-saver';
-import { FileService } from './file.service';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { HttpClient } from '@angular/common/http'
+import { saveAs } from 'file-saver'
+import { FileService } from './file.service'
 
 @Component({
     selector: 'app-root',
@@ -9,28 +9,28 @@ import { FileService } from './file.service';
     styleUrls: ['./app.component.css'],
 })
 export class AppComponent implements OnInit {
-    displaySingleFile!: Boolean;
-    displayMultipleFiles!: Boolean;
-    displayMultipleFileArray!: Array<any>;
-    displaySingleFileArray!: Array<any>;
+    displaySingleFile!: Boolean
+    displayMultipleFiles!: Boolean
+    displayMultipleFileArray!: Array<any>
+    displaySingleFileArray!: Array<any>
 
-    displayedColumnsTable1 = ['name', 'action'];
-    displayedColumnsTable2 = ['name', 'action'];
+    displayedColumnsTable1 = ['name', 'action']
+    displayedColumnsTable2 = ['name', 'action']
 
     @ViewChild('singleInput', { static: false })
-    singleInput!: ElementRef;
+    singleInput!: ElementRef
 
     @ViewChild('multipleInput', { static: false })
-    multipleInput!: ElementRef;
+    multipleInput!: ElementRef
 
-    files: any;
-    multipleFiles = [];
+    files: any
+    multipleFiles = []
 
     constructor(private http: HttpClient, private fileService: FileService) {
-        this.displaySingleFile = false;
-        this.displayMultipleFileArray = [];
-        this.displayMultipleFiles = false;
-        this.displaySingleFileArray = [];
+        this.displaySingleFile = false
+        this.displayMultipleFileArray = []
+        this.displayMultipleFiles = false
+        this.displaySingleFileArray = []
     }
 
     ngOnInit(): void {
@@ -51,41 +51,42 @@ export class AppComponent implements OnInit {
 
     selectImage(event: any) {
         if (event.target.files.length > 0) {
-            const file = event.target.files[0];
-            this.files = file;
+            const file = event.target.files[0]
+            this.files = file
         }
     }
 
     onSubmit() {
-        const formdata = new FormData();
-        formdata.append('file', this.files);
+        const formdata = new FormData()
+        formdata.append('file', this.files)
         this.fileService.postFile(formdata)
             .subscribe((res) => {
-                this.singleInput.nativeElement.value = '';
-                this.displaySingleFile = true;
-                this.displaySingleFileArray = [...this.displaySingleFileArray, res.path];
-            }, console.log);
+                this.singleInput.nativeElement.value = ''
+                this.displaySingleFile = true
+                this.displaySingleFileArray = [...this.displaySingleFileArray, res.path]
+                this.displayMultipleFileArray = [...this.displayMultipleFileArray, res.path]
+            }, console.log)
     }
 
     selectMultipleImage(event: any) {
         if (event.target.files.length > 0) {
-            this.multipleFiles = event.target.files;
+            this.multipleFiles = event.target.files
         }
     }
 
     onMultipleSubmit() {
-        const formdata = new FormData();
+        const formdata = new FormData()
 
         for (let img of this.multipleFiles) {
-            formdata.append('files', img);
+            formdata.append('files', img)
         }
 
         this.fileService.postFiles(formdata)
             .subscribe((res) => {
-                this.multipleInput.nativeElement.value = '';
-                this.displayMultipleFiles = true;
+                this.multipleInput.nativeElement.value = ''
+                this.displayMultipleFiles = true
                 this.getTableData()
-            }, console.log);
+            }, console.log)
     }
 
     onFileDownload(fileName: string) {
